@@ -55,13 +55,14 @@ body {
     font-size: 1.1em;
     border-radius: 12px;
     border: none;
-    background: #ff4d6d;
+    background: #ff1e1e;
     color: white;
 }
 
 .lock p {
     margin-top: 10px;
     color: #ffb6c1;
+    min-height: 24px;
 }
 
 /* 💖 CARD */
@@ -74,17 +75,17 @@ body {
     text-align: center;
     background: rgba(255,255,255,0.1);
     border-radius: 20px;
-    box-shadow: 0 0 35px rgba(255,0,120,0.6);
+    box-shadow: 0 0 35px rgba(255,0,0,0.6);
     animation: glow 3s infinite alternate;
 }
 
 @keyframes glow {
-    from { box-shadow: 0 0 20px rgba(255,0,120,0.4); }
-    to { box-shadow: 0 0 40px rgba(255,0,160,0.9); }
+    from { box-shadow: 0 0 20px rgba(255,0,0,0.4); }
+    to { box-shadow: 0 0 40px rgba(255,0,0,0.9); }
 }
 
 h1 { font-size: 2.2em; }
-h2 { font-size: 1.2em; font-weight: 400; color: #ffb6c1; }
+h2 { font-size: 1.2em; font-weight: 400; color: #ff9aa9; }
 
 .countdown {
     margin: 12px 0;
@@ -98,15 +99,17 @@ h2 { font-size: 1.2em; font-weight: 400; color: #ffb6c1; }
     margin-top: 15px;
 }
 
+/* ❤️ RED BEATING HEART */
 .heart {
     font-size: 55px;
     margin: 18px 0;
+    color: red;
     animation: heartbeat 1.4s infinite;
 }
 
 @keyframes heartbeat {
     0%,100% { transform: scale(1); }
-    50% { transform: scale(1.25); }
+    50% { transform: scale(1.3); }
 }
 
 .secret {
@@ -143,8 +146,8 @@ h2 { font-size: 1.2em; font-weight: 400; color: #ffb6c1; }
 <div class="lock" id="lock">
     <h1>Only For Asmi ❤️</h1>
     <input type="password" id="pass" placeholder="Enter password">
-    <button onclick="unlock()">Unlock 💖</button>
-    <p>Hint: Our special day 💞</p>
+    <button onclick="unlock()">Unlock ❤️</button>
+    <p id="lockMsg">Hint: Our special day 💞</p>
 </div>
 
 <!-- 🎵 MUSIC -->
@@ -160,37 +163,47 @@ h2 { font-size: 1.2em; font-weight: 400; color: #ffb6c1; }
     <div class="countdown" id="countdown"></div>
 
     <div class="story">
-        Four years ago, we started a journey without knowing
-        how deeply our hearts would connect.
+        Four years ago, we began something beautiful
+        without knowing it would become forever.
         <br><br>
-        Through smiles, silence, and dreams,
-        you became my constant.
-        <br><br>
-        And as a new year begins —
+        And as this new year begins —
         I still choose you.
     </div>
 
-    <div class="heart" onclick="showSecret()">💖</div>
+    <div class="heart" onclick="showSecret()">❤️</div>
 
     <div class="secret" id="secret">
-        No matter where life takes us,<br>
-        my hand will always look for yours.<br>
+        No matter what tomorrow brings,<br>
+        my hand will always find yours.<br>
         <b>You are my forever.</b> 🌙
     </div>
 
     <div class="from">
         Forever yours,<br>
-        Subhradip 💫
+        Subhradip ❤️
     </div>
 </div>
 
 <script>
+// 🎯 IST MIDNIGHT
+const targetTime = new Date("2026-01-01T00:00:00+05:30").getTime();
+
 function unlock() {
+    const now = new Date().getTime();
+    const msg = document.getElementById("lockMsg");
+
+    if (now < targetTime) {
+        msg.innerHTML = "Not yet… wait for our new beginning 💞";
+        return;
+    }
+
     if (document.getElementById("pass").value === "16022021") {
         document.getElementById("lock").style.display = "none";
         document.getElementById("card").style.display = "block";
         document.getElementById("music").play();
         fireworks();
+    } else {
+        msg.innerHTML = "That’s not our day 😉";
     }
 }
 
@@ -198,15 +211,17 @@ function showSecret() {
     document.getElementById("secret").style.display = "block";
 }
 
-const target = new Date("January 1, 2026 00:00:00").getTime();
+// ⏳ COUNTDOWN
 setInterval(() => {
     const now = new Date().getTime();
-    const d = target - now;
+    const d = targetTime - now;
     document.getElementById("countdown").innerHTML =
         `Countdown: ${Math.floor(d/86400000)}d ${Math.floor(d/3600000)%24}h ${Math.floor(d/60000)%60}m ${Math.floor(d/1000)%60}s`;
-    if (d < 1000) fireworks();
+
+    if (Math.abs(d) < 1000) fireworks();
 }, 1000);
 
+// 🎆 FIREWORKS
 function fireworks() {
     for (let i = 0; i < 15; i++) {
         let f = document.createElement("div");
