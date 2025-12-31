@@ -34,10 +34,7 @@ body {
     z-index: 5;
 }
 
-.lock h1 {
-    font-size: 2em;
-    margin-bottom: 15px;
-}
+.lock h1 { font-size: 2em; margin-bottom: 10px; }
 
 .lock input {
     width: 100%;
@@ -46,7 +43,6 @@ body {
     font-size: 1.1em;
     border-radius: 10px;
     border: none;
-    outline: none;
 }
 
 .lock button {
@@ -59,10 +55,12 @@ body {
     color: white;
 }
 
-.lock p {
-    margin-top: 10px;
-    color: #ffb6c1;
-    min-height: 24px;
+.lock p { margin-top: 10px; color: #ffb6c1; }
+
+.lockCountdown {
+    margin-top: 15px;
+    font-size: 1.1em;
+    color: #ffd6e0;
 }
 
 /* 💖 CARD */
@@ -85,13 +83,7 @@ body {
 }
 
 h1 { font-size: 2.2em; }
-h2 { font-size: 1.2em; font-weight: 400; color: #ff9aa9; }
-
-.countdown {
-    margin: 12px 0;
-    font-size: 1.05em;
-    color: #ffd6e0;
-}
+h2 { font-size: 1.2em; color: #ff9aa9; font-weight: 400; }
 
 .story {
     font-size: 1.05em;
@@ -99,17 +91,47 @@ h2 { font-size: 1.2em; font-weight: 400; color: #ff9aa9; }
     margin-top: 15px;
 }
 
-/* ❤️ RED BEATING HEART */
+/* ❤️ FLOATING LOVE TEXT */
+.loveText {
+    margin: 18px 0;
+    font-size: 1.3em;
+    color: red;
+    animation: floatLove 2.5s ease-in-out infinite;
+}
+
+@keyframes floatLove {
+    0% { transform: translateY(0); opacity: 0.8; }
+    50% { transform: translateY(-8px); opacity: 1; }
+    100% { transform: translateY(0); opacity: 0.8; }
+}
+
+/* ❤️ MAIN HEART */
 .heart {
     font-size: 55px;
     margin: 18px 0;
-    color: red;
+    cursor: pointer;
     animation: heartbeat 1.4s infinite;
 }
 
 @keyframes heartbeat {
     0%,100% { transform: scale(1); }
     50% { transform: scale(1.3); }
+}
+
+/* 💕 MINI HEARTS */
+.mini-heart {
+    position: absolute;
+    font-size: 20px;
+    animation: fly 1.2s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes fly {
+    from { transform: translate(0,0) scale(1); opacity: 1; }
+    to {
+        transform: translate(var(--x), var(--y)) scale(0.5);
+        opacity: 0;
+    }
 }
 
 .secret {
@@ -148,6 +170,7 @@ h2 { font-size: 1.2em; font-weight: 400; color: #ff9aa9; }
     <input type="password" id="pass" placeholder="Enter password">
     <button onclick="unlock()">Unlock ❤️</button>
     <p id="lockMsg">Hint: Our special day 💞</p>
+    <div class="lockCountdown" id="lockCountdown"></div>
 </div>
 
 <!-- 🎵 MUSIC -->
@@ -160,7 +183,7 @@ h2 { font-size: 1.2em; font-weight: 400; color: #ff9aa9; }
     <h1>Happy New Year 2026 🎆</h1>
     <h2>My Love, Asmi ❤️</h2>
 
-    <div class="countdown" id="countdown"></div>
+    <div class="loveText">I LOVE YOU MOST BABE ❤️</div>
 
     <div class="story">
         Four years ago, we began something beautiful
@@ -170,7 +193,7 @@ h2 { font-size: 1.2em; font-weight: 400; color: #ff9aa9; }
         I still choose you.
     </div>
 
-    <div class="heart" onclick="showSecret()">❤️</div>
+    <div class="heart" id="mainHeart" onclick="explodeHeart()">❤️</div>
 
     <div class="secret" id="secret">
         No matter what tomorrow brings,<br>
@@ -189,7 +212,7 @@ h2 { font-size: 1.2em; font-weight: 400; color: #ff9aa9; }
 const targetTime = new Date("2026-01-01T00:00:00+05:30").getTime();
 
 function unlock() {
-    const now = new Date().getTime();
+    const now = Date.now();
     const msg = document.getElementById("lockMsg");
 
     if (now < targetTime) {
@@ -207,18 +230,35 @@ function unlock() {
     }
 }
 
-function showSecret() {
-    document.getElementById("secret").style.display = "block";
+// 💥 HEART EXPLOSION
+function explodeHeart() {
+    const heart = document.getElementById("mainHeart");
+    const rect = heart.getBoundingClientRect();
+
+    heart.style.visibility = "hidden";
+
+    for (let i = 0; i < 18; i++) {
+        const h = document.createElement("div");
+        h.className = "mini-heart";
+        h.innerText = "❤️";
+        h.style.left = rect.left + rect.width/2 + "px";
+        h.style.top = rect.top + "px";
+        h.style.setProperty("--x", (Math.random()*120-60)+"px");
+        h.style.setProperty("--y", (Math.random()*-120)+"px");
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 1200);
+    }
+
+    setTimeout(() => {
+        document.getElementById("secret").style.display = "block";
+    }, 1200);
 }
 
-// ⏳ COUNTDOWN
+// ⏳ COUNTDOWN ON LOCK
 setInterval(() => {
-    const now = new Date().getTime();
-    const d = targetTime - now;
-    document.getElementById("countdown").innerHTML =
+    const d = targetTime - Date.now();
+    document.getElementById("lockCountdown").innerHTML =
         `Countdown: ${Math.floor(d/86400000)}d ${Math.floor(d/3600000)%24}h ${Math.floor(d/60000)%60}m ${Math.floor(d/1000)%60}s`;
-
-    if (Math.abs(d) < 1000) fireworks();
 }, 1000);
 
 // 🎆 FIREWORKS
