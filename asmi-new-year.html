@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Only For Asmi ❤️</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #1a2a3a, #000);
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* 🔐 LOCK SCREEN */
+.lock {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #0f2027, #203a43);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    text-align: center;
+    z-index: 5;
+}
+
+.lock h1 {
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+
+.lock input {
+    width: 100%;
+    max-width: 260px;
+    padding: 12px;
+    font-size: 1.1em;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+.lock button {
+    margin-top: 12px;
+    padding: 12px 25px;
+    font-size: 1.1em;
+    border-radius: 12px;
+    border: none;
+    background: #ff4d6d;
+    color: white;
+}
+
+.lock p {
+    margin-top: 10px;
+    color: #ffb6c1;
+}
+
+/* 💖 CARD */
+.card {
+    display: none;
+    width: 100%;
+    max-width: 420px;
+    padding: 25px 20px;
+    margin: 15px;
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    box-shadow: 0 0 35px rgba(255,0,120,0.6);
+    animation: glow 3s infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 20px rgba(255,0,120,0.4); }
+    to { box-shadow: 0 0 40px rgba(255,0,160,0.9); }
+}
+
+h1 { font-size: 2.2em; }
+h2 { font-size: 1.2em; font-weight: 400; color: #ffb6c1; }
+
+.countdown {
+    margin: 12px 0;
+    font-size: 1.05em;
+    color: #ffd6e0;
+}
+
+.story {
+    font-size: 1.05em;
+    line-height: 1.6;
+    margin-top: 15px;
+}
+
+.heart {
+    font-size: 55px;
+    margin: 18px 0;
+    animation: heartbeat 1.4s infinite;
+}
+
+@keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+}
+
+.secret {
+    display: none;
+    font-size: 1.1em;
+    color: #ffe4ec;
+}
+
+.from {
+    margin-top: 18px;
+    font-style: italic;
+    color: #ffd6e0;
+}
+
+/* 🎆 FIREWORK */
+.firework {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    animation: explode 1.3s ease-out forwards;
+}
+
+@keyframes explode {
+    from { transform: scale(0); opacity: 1; }
+    to { transform: scale(22); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🔐 LOCK -->
+<div class="lock" id="lock">
+    <h1>Only For Asmi ❤️</h1>
+    <input type="password" id="pass" placeholder="Enter password">
+    <button onclick="unlock()">Unlock 💖</button>
+    <p>Hint: Our special day 💞</p>
+</div>
+
+<!-- 🎵 MUSIC -->
+<audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5f45b28a75.mp3">
+</audio>
+
+<!-- 💖 CARD -->
+<div class="card" id="card">
+    <h1>Happy New Year 2026 🎆</h1>
+    <h2>My Love, Asmi ❤️</h2>
+
+    <div class="countdown" id="countdown"></div>
+
+    <div class="story">
+        Four years ago, we started a journey without knowing
+        how deeply our hearts would connect.
+        <br><br>
+        Through smiles, silence, and dreams,
+        you became my constant.
+        <br><br>
+        And as a new year begins —
+        I still choose you.
+    </div>
+
+    <div class="heart" onclick="showSecret()">💖</div>
+
+    <div class="secret" id="secret">
+        No matter where life takes us,<br>
+        my hand will always look for yours.<br>
+        <b>You are my forever.</b> 🌙
+    </div>
+
+    <div class="from">
+        Forever yours,<br>
+        Subhradip 💫
+    </div>
+</div>
+
+<script>
+function unlock() {
+    if (document.getElementById("pass").value === "16022021") {
+        document.getElementById("lock").style.display = "none";
+        document.getElementById("card").style.display = "block";
+        document.getElementById("music").play();
+        fireworks();
+    }
+}
+
+function showSecret() {
+    document.getElementById("secret").style.display = "block";
+}
+
+const target = new Date("January 1, 2026 00:00:00").getTime();
+setInterval(() => {
+    const now = new Date().getTime();
+    const d = target - now;
+    document.getElementById("countdown").innerHTML =
+        `Countdown: ${Math.floor(d/86400000)}d ${Math.floor(d/3600000)%24}h ${Math.floor(d/60000)%60}m ${Math.floor(d/1000)%60}s`;
+    if (d < 1000) fireworks();
+}, 1000);
+
+function fireworks() {
+    for (let i = 0; i < 15; i++) {
+        let f = document.createElement("div");
+        f.className = "firework";
+        f.style.left = Math.random()*100 + "vw";
+        f.style.top = Math.random()*100 + "vh";
+        f.style.background = `hsl(${Math.random()*360},100%,60%)`;
+        document.body.appendChild(f);
+        setTimeout(() => f.remove(), 1300);
+    }
+}
+</script>
+
+</body>
+</html>
